@@ -2,36 +2,42 @@
 Function Contact Formular
 ---------------------------------------------------*/	
 		
-	function ContactForm() {	
-	
-		if( $('#contact-formular').length > 0 ){
-			
-			$('#contactform').submit(function(){
-				var action = $(this).attr('action');
-				$("#message").slideUp(750,function() {
-					$('#message').hide();
-					$('#submit').attr('disabled','disabled');		
-					$.post(action, {
-						name: $('#name').val(),
-						email: $('#email').val(),
-						comments: $('#comments').val(),
-						verify: $('#verify').val()
-					},
-					function(data){
-						document.getElementById('message').innerHTML = data;
-						$('#message').slideDown('slow');
-						$('#contactform img.loader').fadeOut('slow',function(){$(this).remove()});
-						$('#submit').removeAttr('disabled');
-						if(data.match('success') != null) $('#contactform').slideUp('slow');		
-					}
-				);		
-				});		
-				return false;		
-			});		
-		}
-		
+function ContactForm() {
+    if ($('#contact-formular').length > 0) {
 
-	}//End ContactForm	
+        $('#contactform').submit(function (e) {
+            e.preventDefault();
+
+            var action = 'https://email-server-0lc4.onrender.com/contact'; // your live endpoint
+
+            $("#message").slideUp(750, function () {
+                $('#message').hide();
+                $('#submit').attr('disabled', 'disabled');
+
+                $.post(action, {
+                    name: $('#name').val(),
+                    email: $('#email').val(),
+                    description: $('#comments').val() // server expects 'description'
+                })
+                .done(function (response) {
+                    $('#message').html(response).slideDown('slow');
+                    $('#contactform img.loader').fadeOut('slow', function () { $(this).remove() });
+                    $('#submit').removeAttr('disabled');
+                    if (response.toLowerCase().includes('success')) {
+                        $('#contactform').slideUp('slow');
+                    }
+                })
+                .fail(function (xhr, status, error) {
+                    $('#message').html('<div class="error">There was an error sending your message. Please try again later.</div>').slideDown('slow');
+                    $('#submit').removeAttr('disabled');
+                });
+            });
+
+            return false;
+        });
+    }
+}
+
 
 
 /*--------------------------------------------------
