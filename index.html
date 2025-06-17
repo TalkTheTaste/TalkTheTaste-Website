@@ -26,10 +26,53 @@
       ga("create", "code_here", "auto");
       ga("send", "pageview");
     </script>
+    <script>
+      function waitForElement(selector, callback) {
+        const el = document.querySelector(selector);
+        if (el) return callback(el);
+        requestAnimationFrame(() => waitForElement(selector, callback));
+      }
+
+      waitForElement(".hero-title-placeholder", (placeholder) => {
+        const span = placeholder.querySelector("span");
+        if (!span) return;
+
+        const updateText = () => {
+          console.log("Current classes:", placeholder.className);
+          if (placeholder.classList.contains("completed")) {
+            span.textContent = "TalkTheTaste";
+            console.log("TalkTheTaste");
+          } else {
+            span.textContent = "TTT";
+            console.log("TTT");
+          }
+        };
+
+        // Use polling instead of MutationObserver
+        let lastClass = "";
+        setInterval(() => {
+          const currentClass = placeholder.className;
+          if (currentClass !== lastClass) {
+            lastClass = currentClass;
+            updateText();
+          }
+        }, 100);
+
+        updateText(); // Initial check
+      });
+    </script>
 
     <title>TalkTheTaste | Tech</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="Bring your brand above the surface" />
+    <link rel="canonical" href="https://talkthetaste.com/" />
+    <meta name="robots" content="index, follow" />
+    <meta name="googlebot" content="index, follow" />
+    <meta name="bingbot" content="index, follow" />
+    <meta name="yandexbot" content="index, follow" />
+    <meta name="sogou" content="index, follow" />
+    <meta name="baidu" content="index, follow" />
+    <meta name="360" content="index, follow" />
     <meta name="author" content="TalkTheTaste" />
     <meta
       property="og:image"
@@ -174,7 +217,7 @@
                       <a
                         class="ajax-link"
                         data-type="page-transition"
-                        href="index-playground.html"
+                        href="projects.html"
                         ><div class="before-span">
                           <span data-hover="Projects">Projects</span>
                         </div></a
@@ -244,8 +287,9 @@
                         class="hero-title caption-timeline"
                         data-infoTextBefore="Welcome"
                         data-infoTextAfter="Est. 2025"
+                        id="TTT"
                       >
-                        <div><span>TalkTheTaste</span></div>
+                        <div><span>TTT</span></div>
                       </h1>
 
                       <div
